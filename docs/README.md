@@ -7,7 +7,7 @@ This module creates lambda function role and ECR repository for SAM lambda deplo
 ## Usage
 
 Name of the roles and repository will be given by the script while onboarding the lambda function to **[infrastructure-management-lambda](https://github.com/glg/infrastructure-management-lambda)**
-repository. 
+repository.
 **Example:**
 
 ![1702979388471](image/README/1702979388471.png)
@@ -19,7 +19,6 @@ module "target" {
     aws.primary = aws.prototype_use1
   }
   name                 = "${sam-project-name}"
-  artifact_bucket_name = "${artifact_bucket_name}}"
   ecr_repository_name  = "${ecr_repository_name}"
 }
 

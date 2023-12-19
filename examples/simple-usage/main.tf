@@ -29,7 +29,6 @@ module "target" {
     aws.primary = aws.prototype_use1
   }
   name                 = "test-${local.id}"
-  artifact_bucket_name = "glg-sam-artifacts-prototype-use1"
   ecr_repository_name  = "glg/infrastructure-management-lambda/test-${local.id}"
 }
 
