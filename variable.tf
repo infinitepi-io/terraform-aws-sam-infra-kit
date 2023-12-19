@@ -12,11 +12,11 @@ variable "name" {
 }
 
 variable "artifact_bucket_name" {
-  type = string
+  type        = string
   description = "Cloudformation template backup bucket name"
 }
 
 variable "ecr_repository_name" {
-  type = string
+  type        = string
   description = "ECR repository to keep the lambda image"
 }
