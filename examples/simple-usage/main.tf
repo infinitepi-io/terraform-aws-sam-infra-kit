@@ -28,8 +28,8 @@ module "target" {
   providers = {
     aws.primary = aws.prototype_use1
   }
-  name                 = "test-${local.id}"
-  ecr_repository_name  = "glg/infrastructure-management-lambda/test-${local.id}"
+  name                = "test-${local.id}"
+  ecr_repository_name = "glg/infrastructure-management-lambda/test-${local.id}"
 }
 
 resource "aws_iam_role_policy" "lambda" {
