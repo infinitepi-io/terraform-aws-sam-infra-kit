@@ -1,31 +1,51 @@
+
 [![unit-test](../../../actions/workflows/unit-test.yml/badge.svg)](../../../actions/workflows/unit-test.yml)
 
-# `terraform-aws-testable-module`
+# `terraform-aws-sam-lambda-essentials`
 
-A template repository for Terraform modules where AWS is the primary provider.
+This module cerates lambda function role and ECR repository for SAM lambda deployed using **[infrastructure-management-lambda](https://github.com/glg/infrastructure-management-lambda)** .
 
-- Comes with support for unit tests that run in GitHub actions
-- Supports Spacelift integration tests agains the prototype account
+## Usage
 
-## Getting Started (Do this before writing code)
+Name of the roles and repository will be given by the script while onboarding the lambda function to **[infrastructure-management-lambda](https://github.com/glg/infrastructure-management-lambda)**
+Example:
 
-- [Create a new repository](https://github.com/undefined-io/terraform-aws-testable-module/generate) from the template repository.
+![1702979388471](image/README/1702979388471.png)
 
-  > If this module requires access to other private repository modules in the via SSH, please add the `TF_TESTABLE_MODULE_SSH_KEY`  secret to your repository secrets.
+```bash
+module "target" {
+  source = "../../"
+  providers = {
+    aws.primary = aws.prototype_use1
+  }
+  name                 = "${sam-project-name}"
+  artifact_bucket_name = "${artifact_bucket_name}}"
+  ecr_repository_name  = "${ecr_repository_name}"
+}
 
-- (*Suggestion*) Add `terraform` and `module` as topics in the "About" section of the repository
+# Add the other required policy to the lambda role. 
+resource "aws_iam_role_policy" "lambda" {
+  provider = aws.prototype_use1
+  name     = "GetSpaceliftSumoApiKey"
+  role     = module.target.lambda_role.lambda_role_name
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : {
+      "Effect" : "Allow",
+      "Action" : [
+        "secretsmanager:GetSecretValue"
+      ]
+      "Resource" : [
+        "arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:${local.secret_name}-??????"
+      ]
+    }
+  })
+}
 
-  > This conforms with the GLG standard, and makes the module easily findable in GitHub.
-
-- :heavy_exclamation_mark: Review all the default choices in the the `version.tf` file and adjust them as needed.
-
-  > The `version.tf` file directly impacts the tests in the `examples/` directory, and changes might be needed there before all the tests will pass.
-
-- (*Optional*) Change the matrix to match what you plan on supporting in the `.github/workflows/module-test.yaml` file
-
-- (Optional) If you plan on running the GitHub Action locally, install [nektos/act](https://github.com/nektos/act).  More information on that is [here]().
-
-- Commit the initial changes to make sure the GitHub action succeeds with the new repo.
+output "all" {
+  value = module.target
+}
+```
 
 ## Testing Overview
 
@@ -36,11 +56,9 @@ Our current system is focused on the following.
 - Local **Unit Tests**
 
   These use the *currently installed version* of Terraform, and do a basic sanity on the module to make sure it would run at all.
-
 - Automated **Unit Tests** via GitHub actions.
 
   These are fired automatically on commit to GitHub, but can also be executed locally.  They run against a matrix of Terraform versions to make establish that versions of Terraform this module could support.
-
 - Locally initiated **Integration Tests**.
 
 ## 1. Local Unit Tests
@@ -107,47 +125,50 @@ make apply
 make destroy
 ```
 
-## Notes
 
-### Existing Module Usage Helper Script
+<!-- BEGIN_TF_DOCS -->
+## Requirements
 
-```bash
-# Run in the root of aws-infrastructure
-grep -ire '[?]ref=' \
-  --exclude-dir=.terraform \
-  --no-filename . \
-  | sed -e 's|git@github.com:||' -e 's|git::https://github.com/||' \
-  | awk -F' = ' '{a[$2]++} END{for (i in a) print i, a[i]}' \
-  | sort
-```
+| Name | Version |
+|------|---------|
+| terraform | >= 1.0 |
+| aws | >= 4.27 |
 
-### Updating to the latest version of the template
+## Providers
 
-(*Optional*) This setup will allow you to easily merge updates to the template at a later point.  By doing this now, the later merges will be significantly easier.
+| Name | Version |
+|------|---------|
+| aws.primary | >= 4.27 |
 
-```bash
-git remote add template git@github.com:undefined-io/terraform-aws-testable-module.git
-git fetch --all
-git merge --no-commit --allow-unrelated-histories template/main
-# resolve the merge conflicts
-git add -A
-git commit
-```
+## Modules
 
-## Module Versioning
+No modules.
 
-This pertains to the **`version.tf`** file at the root of the module.  If you need guidance, reach out to the SRE team for advice.
+## Resources
 
-### Upper Bounds (In General)
+| Name | Type |
+|------|------|
+| [aws_ecr_repository.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository) | resource |
+| [aws_ecr_repository_policy.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository_policy) | resource |
+| [aws_iam_role.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role_policy_attachment.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) | data source |
+| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
-With modules, it's highly recommended not to set an upper bound for versions, as it leads to situations where a module can no longer be used, because the upper bound unnecessarily forces the module to be upgraded, even though it would still function in higher versions.
+## Inputs
 
-Historically, we've had more problems with modules that had a specific upper bound for no reason, than with modules that had no upper bounds.
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| artifact\_bucket\_name | Cloudformation template backup bucket name | `string` | n/a | yes |
+| ecr\_repository\_name | ECR repository to keep the lambda image | `string` | n/a | yes |
+| name | 'name' will at least in part be assigned to most resources | `string` | n/a | yes |
 
-### Terraform
+## Outputs
 
-Setting a proper lower bound, to make sure the module is safe and can function at all is essential.  In terms up upper bounds, support as many versions as possible here, so the module can actually get good use.  It's really up to the consumer to define these constraints more than the module.  To cover different versions of Terraform, matrix in the provided GitHub action will help you.
-
-### AWS
-
-Focus on the target audience. For modules, compatibility is more important that being completely up to date.  When writing a module, it makes sense to really find a good middle ground for provider lower bounds.
+| Name | Description |
+|------|-------------|
+| aws | n/a |
+| ecr\_repository | n/a |
+| lambda\_role | n/a |
+<!-- END_TF_DOCS -->

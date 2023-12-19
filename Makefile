@@ -70,4 +70,7 @@ action:
 	@act -s TF_TESTABLE_MODULE_SSH_KEY -C . \
 		|| echo -e "\n:: NOTE: If act failed due to private repo issues, TF_TESTABLE_MODULE_SSH_KEY needs to be set per README."
 
-.PHONY: main full-test apply destroy unit-test clean aws-creds plan action
+docs:
+	docker run --rm --volume "$(CURDIR):/terraform-docs" quay.io/terraform-docs/terraform-docs:0.16.0 markdown terraform-docs --anchor=false --indent 2 --output-file docs/README.md
+
+.PHONY: main full-test apply destroy unit-test clean aws-creds plan action docs

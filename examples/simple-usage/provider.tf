@@ -14,8 +14,12 @@ terraform {
 
 locals {
   default_tags = {
-    "ManagedBy"   = "Terraform"
-    "Environment" = "Test"
+    ManagedBy       = "Terraform"
+    Environment     = "Production"
+    BusinessUnit    = "Core Engineering"
+    SpendAllocation = "Infrastructure"
+    Owner           = "SRE"
+    GitHub          = "https://github.com/glg/spacelift/issues/647"
   }
 }
 

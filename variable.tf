@@ -11,7 +11,12 @@ variable "name" {
   DOC
 }
 
-variable "tags" {
-  type    = map(string)
-  default = {}
+variable "artifact_bucket_name" {
+  type = string
+  description = "Cloudformation template backup bucket name"
+}
+
+variable "ecr_repository_name" {
+  type = string
+  description = "ECR repository to keep the lambda image"
 }
