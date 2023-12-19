@@ -1,14 +1,14 @@
-
 [![unit-test](../../../actions/workflows/unit-test.yml/badge.svg)](../../../actions/workflows/unit-test.yml)
 
 # `terraform-aws-sam-lambda-essentials`
 
-This module cerates lambda function role and ECR repository for SAM lambda deployed using **[infrastructure-management-lambda](https://github.com/glg/infrastructure-management-lambda)** .
+This module creates lambda function role and ECR repository for SAM lambda deployed using **[infrastructure-management-lambda](https://github.com/glg/infrastructure-management-lambda)** .
 
 ## Usage
 
 Name of the roles and repository will be given by the script while onboarding the lambda function to **[infrastructure-management-lambda](https://github.com/glg/infrastructure-management-lambda)**
-Example:
+repository. 
+**Example:**
 
 ![1702979388471](image/README/1702979388471.png)
 
@@ -125,19 +125,19 @@ make apply
 make destroy
 ```
 
-
 <!-- BEGIN_TF_DOCS -->
+
 ## Requirements
 
-| Name | Version |
-|------|---------|
-| terraform | >= 1.0 |
-| aws | >= 4.27 |
+| Name      | Version |
+| --------- | ------- |
+| terraform | >= 1.0  |
+| aws       | >= 4.27 |
 
 ## Providers
 
-| Name | Version |
-|------|---------|
+| Name        | Version |
+| ----------- | ------- |
 | aws.primary | >= 4.27 |
 
 ## Modules
@@ -146,29 +146,30 @@ No modules.
 
 ## Resources
 
-| Name | Type |
-|------|------|
-| [aws_ecr_repository.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository) | resource |
-| [aws_ecr_repository_policy.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository_policy) | resource |
-| [aws_iam_role.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
-| [aws_iam_role_policy_attachment.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
-| [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) | data source |
-| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
+| Name                                                                                                                                         | Type        |
+| -------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| [aws_ecr_repository.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository)                           | resource    |
+| [aws_ecr_repository_policy.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository_policy)             | resource    |
+| [aws_iam_role.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role)                                     | resource    |
+| [aws_iam_role_policy_attachment.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource    |
+| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity)                   | data source |
+| [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition)                               | data source |
+| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region)                                     | data source |
 
 ## Inputs
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| artifact\_bucket\_name | Cloudformation template backup bucket name | `string` | n/a | yes |
-| ecr\_repository\_name | ECR repository to keep the lambda image | `string` | n/a | yes |
-| name | 'name' will at least in part be assigned to most resources | `string` | n/a | yes |
+| Name                   | Description                                                | Type       | Default | Required |
+| ---------------------- | ---------------------------------------------------------- | ---------- | ------- | :------: |
+| artifact\_bucket\_name | Cloudformation template backup bucket name                 | `string` | n/a     |   yes   |
+| ecr\_repository\_name  | ECR repository to keep the lambda image                    | `string` | n/a     |   yes   |
+| name                   | 'name' will at least in part be assigned to most resources | `string` | n/a     |   yes   |
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-| aws | n/a |
-| ecr\_repository | n/a |
-| lambda\_role | n/a |
+| Name            | Description |
+| --------------- | ----------- |
+| aws             | n/a         |
+| ecr\_repository | n/a         |
+| lambda\_role    | n/a         |
+
 <!-- END_TF_DOCS -->
