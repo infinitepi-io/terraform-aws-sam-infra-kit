@@ -22,18 +22,7 @@ module "target" {
   ecr_repository_name = "glg/infrastructure-management-lambda/test-${local.id}"
 # custom_policy is optional, if lambda function required additional permissions. 
   custom_policy = {
-    LambdaAdditionalPolicy = jsonencode({
-      "Version" : "2012-10-17",
-      "Statement" : {
-        "Effect" : "Allow",
-        "Action" : [
-          "secretsmanager:GetSecretValue"
-        ]
-        "Resource" : [
-          "arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:${local.secret_name}-??????"
-        ]
-      }
-    })
+    ${policy_name} = jsonencode(${json_policy_contnt})
   }
 }
 ```
