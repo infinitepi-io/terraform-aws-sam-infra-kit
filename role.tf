@@ -16,6 +16,13 @@ resource "aws_iam_role" "lambda" {
       }
     ]
   })
+  dynamic "inline_policy" {
+      for_each = var.custom_policy
+      content {
+        name  = inline_policy.value["name"]
+        policy  = inline_policy.value["policy"]
+      }
+    }
 
 }
 

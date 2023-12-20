@@ -18,27 +18,26 @@ module "target" {
   providers = {
     aws.primary = aws.prototype_use1
   }
-  name                 = "${sam-project-name}"
-  ecr_repository_name  = "${ecr_repository_name}"
-}
-
-# Add the other required policy to the lambda role. 
-resource "aws_iam_role_policy" "lambda" {
-  provider = aws.prototype_use1
-  name     = "GetSpaceliftSumoApiKey"
-  role     = module.target.lambda_role.lambda_role_name
-  policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : {
-      "Effect" : "Allow",
-      "Action" : [
-        "secretsmanager:GetSecretValue"
-      ]
-      "Resource" : [
-        "arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:${local.secret_name}-??????"
-      ]
+  name                = "test-${local.id}"
+  ecr_repository_name = "glg/infrastructure-management-lambda/test-${local.id}"
+  # custom_policy is optional - if you need to add extra permissions to your SAM lambda function.
+  custom_policy = [
+    {
+      name = "GetSpaceliftSumoApiKey"
+      policy = jsonencode({
+        "Version" : "2012-10-17",
+        "Statement" : {
+          "Effect" : "Allow",
+          "Action" : [
+            "secretsmanager:GetSecretValue"
+          ]
+          "Resource" : [
+            "arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:${local.secret_name}-??????"
+          ]
+        }
+      })
     }
-  })
+  ]
 }
 
 output "all" {

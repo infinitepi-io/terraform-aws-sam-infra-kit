@@ -30,24 +30,23 @@ module "target" {
   }
   name                = "test-${local.id}"
   ecr_repository_name = "glg/infrastructure-management-lambda/test-${local.id}"
-}
-
-resource "aws_iam_role_policy" "lambda" {
-  provider = aws.prototype_use1
-  name     = "GetSpaceliftSumoApiKey"
-  role     = module.target.lambda_role.lambda_role_name
-  policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : {
-      "Effect" : "Allow",
-      "Action" : [
-        "secretsmanager:GetSecretValue"
-      ]
-      "Resource" : [
-        "arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:${local.secret_name}-??????"
-      ]
+  custom_policy = [
+    {
+      name = "GetSpaceliftSumoApiKey"
+      policy = jsonencode({
+        "Version" : "2012-10-17",
+        "Statement" : {
+          "Effect" : "Allow",
+          "Action" : [
+            "secretsmanager:GetSecretValue"
+          ]
+          "Resource" : [
+            "arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:${local.secret_name}-??????"
+          ]
+        }
+      })
     }
-  })
+  ]
 }
 
 output "all" {
