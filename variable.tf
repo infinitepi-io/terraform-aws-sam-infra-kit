@@ -11,11 +11,11 @@ variable "name" {
   DOC
 }
 
-variable "ecr_repository_name" {
-  type        = string
+variable "github_monorepo" {
+  type = string
   validation {
-    condition = can(regex("^glg/$", var.ecr_repository_name))
-    error_message = "The ECR repository name should start with glg/infrastructure-management-lambda"
+    condition     = can(regex("^glg/[^/]+$", var.ecr_repository_name))
+    error_message = "The ECR repository name should start with glg"
   }
   description = "ECR repository to keep the lambda image"
 }

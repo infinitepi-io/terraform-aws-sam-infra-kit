@@ -28,8 +28,8 @@ module "target" {
   providers = {
     aws.primary = aws.prototype_use1
   }
-  name                = "test-${local.id}"
-  ecr_repository_name = "glg/infrastructure-management-lambda/test-${local.id}"
+  name            = "test-${local.id}"
+  github_monorepo = "glg/infrastructure-management-lambda"
   custom_policy = {
     LambdaAdditionalPolicy = jsonencode({
       "Version" : "2012-10-17",

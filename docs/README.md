@@ -18,19 +18,18 @@ module "target" {
   providers = {
     aws.primary = aws.prototype_use1
   }
-  name                = "test-${local.id}"
-  ecr_repository_name = "glg/infrastructure-management-lambda/test-${local.id}"
-# custom_policy is optional, if lambda function required additional permissions. 
-   custom_policy = {
+  name            = "test-${local.id}"
+  github_monorepo = "glg/infrastructure-management-lambda"
+  custom_policy = {
     LambdaAdditionalPolicy = jsonencode({
       "Version" : "2012-10-17",
       "Statement" : {
         "Effect" : "Allow",
         "Action" : [
-          "xxxxx"
+          "xxxx"
         ]
         "Resource" : [
-          "xxxx"
+          "xxxxxxx"
         ]
       }
     })
