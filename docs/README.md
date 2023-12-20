@@ -25,6 +25,10 @@ module "target" {
     ${policy_name} = jsonencode(${json_policy_content})
   }
 }
+
+output "all" {
+  value = module.target
+}
 ```
 
 ## Testing Overview
