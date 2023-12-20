@@ -14,7 +14,7 @@ variable "name" {
 variable "ecr_repository_name" {
   type        = string
   validation {
-    condition = can(regex("^glg/infrastructure-management-lambda/$", var.ecr_repository_name))
+    condition = can(regex("^glg/$", var.ecr_repository_name))
     error_message = "The ECR repository name should start with glg/infrastructure-management-lambda"
   }
   description = "ECR repository to keep the lambda image"
