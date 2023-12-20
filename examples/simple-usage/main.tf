@@ -1,3 +1,17 @@
+#############################################################################
+# Data Resource
+##############################################################################
+data "aws_partition" "primary" {
+  provider = aws.prototype_use1
+}
+
+data "aws_region" "current" {
+  provider = aws.prototype_use1
+}
+data "aws_caller_identity" "current" {
+  provider = aws.prototype_use1
+}
+
 resource "random_string" "sample" {
   special = false
   upper   = false
@@ -5,37 +19,34 @@ resource "random_string" "sample" {
 }
 
 locals {
-  id = random_string.sample.id
-  tags = {
-    # https://github.com/glg/sre/wiki/Tagging-Resources
-    # Use any tags that are applicable and not already covered by default_tags
-    BusinessUnit    = "Core Engineering"
-    SpendAllocation = "Infrastructure"
-    Owner           = "SRE"
-    App             = "Sample"
-    ZenDesk         = "https://glghd.zendesk.com/agent/tickets/xxxx"        # Optional
-    GitHub          = "https://github.com/glg/metadevops-issues/issues/xxx" # Optional
-    FollowUp        = "1970-01-01"                                          # Optional
-    FollowUpReason  = "https://github.com/glg/metadevops-issues/issues/xxx" # Optional
-  }
+  id          = random_string.sample.id
+  secret_name = "dev/spacelift-sumo/apiKeys"
 }
 
 module "target" {
   source = "../../"
-
-  # - This is an example as to how you would work with multiple providers in a module
-  # - If only one provider is needed, just remove the secondary.
-  # - Also, providers don't have to be named primary or secondary, any name that makes
-  #   sense works here.
   providers = {
     aws.primary = aws.prototype_use1
   }
-
-  # Example variables, don't need to be used
-  name = "test-${local.id}"
-  tags = merge(local.tags, {
-    "Hello" = "World"
-  })
+  name                = "test-${local.id}"
+  ecr_repository_name = "glg/infrastructure-management-lambda/test-${local.id}"
+  custom_policy = [
+    {
+      name = "GetSpaceliftSumoApiKey"
+      policy = jsonencode({
+        "Version" : "2012-10-17",
+        "Statement" : {
+          "Effect" : "Allow",
+          "Action" : [
+            "secretsmanager:GetSecretValue"
+          ]
+          "Resource" : [
+            "arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:${local.secret_name}-??????"
+          ]
+        }
+      })
+    }
+  ]
 }
 
 output "all" {

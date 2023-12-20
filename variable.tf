@@ -11,7 +11,13 @@ variable "name" {
   DOC
 }
 
-variable "tags" {
-  type    = map(string)
-  default = {}
+variable "ecr_repository_name" {
+  type        = string
+  description = "ECR repository to keep the lambda image"
+}
+
+variable "custom_policy" {
+  type        = list(map(any))
+  default = []
+  description = "Additional policy required to for the lambda function."
 }
