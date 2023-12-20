@@ -14,10 +14,10 @@ variable "name" {
 variable "github_monorepo" {
   type = string
   validation {
-    condition     = can(regex("^glg/[^/]+$", var.ecr_repository_name))
+    condition     = can(regex("^glg\\/[^\\/]+$", var.github_monorepo))
     error_message = "The ECR repository name should start with glg"
   }
-  description = "ECR repository to keep the lambda image"
+  description = "GitHub repository name"
 }
 
 variable "custom_policy" {
