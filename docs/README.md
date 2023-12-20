@@ -22,7 +22,7 @@ module "target" {
   ecr_repository_name = "glg/infrastructure-management-lambda/test-${local.id}"
 # custom_policy is optional, if lambda function required additional permissions. 
   custom_policy = {
-    ${policy_name} = jsonencode(${json_policy_contnt})
+    ${policy_name} = jsonencode(${json_policy_content})
   }
 }
 ```
