@@ -29,7 +29,7 @@ module "target" {
     aws.primary = aws.prototype_use1
   }
   name                = "test-${local.id}"
-  ecr_repository_name = "test-${local.id}"
+  ecr_repository_name = "glg/infrastructure-management-lambda/test-${local.id}"
   custom_policy = {
     LambdaAdditionalPolicy = jsonencode({
       "Version" : "2012-10-17",
