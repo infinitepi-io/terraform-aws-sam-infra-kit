@@ -28,25 +28,22 @@ module "target" {
   providers = {
     aws.primary = aws.prototype_use1
   }
-  name                = "test-${local.id}"
-  ecr_repository_name = "glg/infrastructure-management-lambda/test-${local.id}"
-  custom_policy = [
-    {
-      name = "GetSpaceliftSumoApiKey"
-      policy = jsonencode({
-        "Version" : "2012-10-17",
-        "Statement" : {
-          "Effect" : "Allow",
-          "Action" : [
-            "secretsmanager:GetSecretValue"
-          ]
-          "Resource" : [
-            "arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:${local.secret_name}-??????"
-          ]
-        }
-      })
-    }
-  ]
+  name            = "test-${local.id}"
+  github_monorepo = "glg/infrastructure-management-lambda"
+  custom_policy = {
+    LambdaAdditionalPolicy = jsonencode({
+      "Version" : "2012-10-17",
+      "Statement" : {
+        "Effect" : "Allow",
+        "Action" : [
+          "secretsmanager:GetSecretValue"
+        ]
+        "Resource" : [
+          "arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:${local.secret_name}-??????"
+        ]
+      }
+    })
+  }
 }
 
 output "all" {

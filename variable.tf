@@ -11,13 +11,17 @@ variable "name" {
   DOC
 }
 
-variable "ecr_repository_name" {
-  type        = string
-  description = "ECR repository to keep the lambda image"
+variable "github_monorepo" {
+  type = string
+  validation {
+    condition     = can(regex("^glg\\/[^\\/]+$", var.github_monorepo))
+    error_message = "Github mopno repository name should start with glg/"
+  }
+  description = "GitHub repository name"
 }
 
 variable "custom_policy" {
-  type        = list(map(any))
-  default = []
+  type        = map(string)
+  default     = {}
   description = "Additional policy required to for the lambda function."
 }

@@ -18,26 +18,22 @@ module "target" {
   providers = {
     aws.primary = aws.prototype_use1
   }
-  name                = "test-${local.id}"
-  ecr_repository_name = "glg/infrastructure-management-lambda/test-${local.id}"
-  # custom_policy is optional - if you need to add extra permissions to your SAM lambda function.
-  custom_policy = [
-    {
-      name = "GetSpaceliftSumoApiKey"
-      policy = jsonencode({
-        "Version" : "2012-10-17",
-        "Statement" : {
-          "Effect" : "Allow",
-          "Action" : [
-            "secretsmanager:GetSecretValue"
-          ]
-          "Resource" : [
-            "arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:${local.secret_name}-??????"
-          ]
-        }
-      })
-    }
-  ]
+  name            = "test-${local.id}"
+  github_monorepo = "glg/infrastructure-management-lambda"
+  custom_policy = {
+    LambdaAdditionalPolicy = jsonencode({
+      "Version" : "2012-10-17",
+      "Statement" : {
+        "Effect" : "...",
+        "Action" : [
+          "..."
+        ]
+        "Resource" : [
+          "..."
+        ]
+      }
+    })
+  }
 }
 
 output "all" {
@@ -123,6 +119,8 @@ make apply
 make destroy
 ```
 
+<!-- BEGIN_TF_DOCS --
+
 <!-- BEGIN_TF_DOCS -->
 
 ## Requirements
@@ -130,13 +128,13 @@ make destroy
 | Name      | Version |
 | --------- | ------- |
 | terraform | >= 1.0  |
-| aws       | >= 4.27 |
+| aws       | >= 5.0  |
 
 ## Providers
 
 | Name        | Version |
 | ----------- | ------- |
-| aws.primary | >= 4.27 |
+| aws.primary | >= 5.0  |
 
 ## Modules
 
@@ -149,6 +147,7 @@ No modules.
 | [aws_ecr_repository.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository)                           | resource    |
 | [aws_ecr_repository_policy.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository_policy)             | resource    |
 | [aws_iam_role.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role)                                     | resource    |
+| [aws_iam_role_policy.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy)                       | resource    |
 | [aws_iam_role_policy_attachment.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource    |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity)                   | data source |
 | [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition)                               | data source |
@@ -156,11 +155,11 @@ No modules.
 
 ## Inputs
 
-| Name                   | Description                                                | Type       | Default | Required |
-| ---------------------- | ---------------------------------------------------------- | ---------- | ------- | :------: |
-| artifact\_bucket\_name | Cloudformation template backup bucket name                 | `string` | n/a     |   yes   |
-| ecr\_repository\_name  | ECR repository to keep the lambda image                    | `string` | n/a     |   yes   |
-| name                   | 'name' will at least in part be assigned to most resources | `string` | n/a     |   yes   |
+| Name             | Description                                                | Type            | Default | Required |
+| ---------------- | ---------------------------------------------------------- | --------------- | ------- | :------: |
+| custom\_policy   | Additional policy required to for the lambda function.     | `map(string)` | `{}`  |    no    |
+| github\_monorepo | GitHub repository name                                     | `string`      | n/a     |   yes   |
+| name             | 'name' will at least in part be assigned to most resources | `string`      | n/a     |   yes   |
 
 ## Outputs
 

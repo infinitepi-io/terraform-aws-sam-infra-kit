@@ -1,6 +1,6 @@
 resource "aws_ecr_repository" "this" {
   provider             = aws.primary
-  name                 = var.ecr_repository_name
+  name                 = "${var.github_monorepo}/${var.name}"
   image_tag_mutability = "MUTABLE"
   force_delete         = true
 
