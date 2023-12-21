@@ -24,12 +24,12 @@ module "target" {
     LambdaAdditionalPolicy = jsonencode({
       "Version" : "2012-10-17",
       "Statement" : {
-        "Effect" : "Allow/Deny",
+        "Effect" : "...",
         "Action" : [
           "xxxx"
         ]
         "Resource" : [
-          "xxxxxxx"
+          "..."
         ]
       }
     })
@@ -122,18 +122,19 @@ make destroy
 <!-- BEGIN_TF_DOCS --
 
 <!-- BEGIN_TF_DOCS -->
+
 ## Requirements
 
-| Name | Version |
-|------|---------|
-| terraform | >= 1.0 |
-| aws | >= 5.0 |
+| Name      | Version |
+| --------- | ------- |
+| terraform | >= 1.0  |
+| aws       | >= 5.0  |
 
 ## Providers
 
-| Name | Version |
-|------|---------|
-| aws.primary | >= 5.0 |
+| Name        | Version |
+| ----------- | ------- |
+| aws.primary | >= 5.0  |
 
 ## Modules
 
@@ -141,30 +142,31 @@ No modules.
 
 ## Resources
 
-| Name | Type |
-|------|------|
-| [aws_ecr_repository.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository) | resource |
-| [aws_ecr_repository_policy.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository_policy) | resource |
-| [aws_iam_role.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
-| [aws_iam_role_policy.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
-| [aws_iam_role_policy_attachment.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
-| [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) | data source |
-| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
+| Name                                                                                                                                         | Type        |
+| -------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| [aws_ecr_repository.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository)                           | resource    |
+| [aws_ecr_repository_policy.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository_policy)             | resource    |
+| [aws_iam_role.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role)                                     | resource    |
+| [aws_iam_role_policy.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy)                       | resource    |
+| [aws_iam_role_policy_attachment.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource    |
+| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity)                   | data source |
+| [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition)                               | data source |
+| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region)                                     | data source |
 
 ## Inputs
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| custom\_policy | Additional policy required to for the lambda function. | `map(string)` | `{}` | no |
-| github\_monorepo | GitHub repository name | `string` | n/a | yes |
-| name | 'name' will at least in part be assigned to most resources | `string` | n/a | yes |
+| Name             | Description                                                | Type            | Default | Required |
+| ---------------- | ---------------------------------------------------------- | --------------- | ------- | :------: |
+| custom\_policy   | Additional policy required to for the lambda function.     | `map(string)` | `{}`  |    no    |
+| github\_monorepo | GitHub repository name                                     | `string`      | n/a     |   yes   |
+| name             | 'name' will at least in part be assigned to most resources | `string`      | n/a     |   yes   |
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-| aws | n/a |
-| ecr\_repository | n/a |
-| lambda\_role | n/a |
+| Name            | Description |
+| --------------- | ----------- |
+| aws             | n/a         |
+| ecr\_repository | n/a         |
+| lambda\_role    | n/a         |
+
 <!-- END_TF_DOCS -->
