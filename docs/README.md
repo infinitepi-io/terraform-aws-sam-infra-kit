@@ -26,7 +26,7 @@ module "target" {
       "Statement" : {
         "Effect" : "...",
         "Action" : [
-          "xxxx"
+          "..."
         ]
         "Resource" : [
           "..."
