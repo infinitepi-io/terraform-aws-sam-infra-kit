@@ -10,7 +10,8 @@ Name of the roles and repository will be given by the script while onboarding th
 repository.
 **Example:**
 
-![1702979388471](image/README/1702979388471.png)
+![image](https://github.com/glg/terraform-aws-sam-lambda-essentials/assets/111346255/cd4c203e-39d8-4e11-ab9e-f6474bb56228)
+
 
 ```bash
 module "target" {
