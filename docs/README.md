@@ -21,7 +21,7 @@ module "target" {
   name            = "test-${local.id}"
   github_monorepo = "glg/infrastructure-management-lambda"
   custom_policy = {
-   # ${policy_name} = ${josn_policy}
+    # ${policy_name} = ${josn_policy}
     LambdaAdditionalPolicy = jsonencode({
       "Version" : "2012-10-17",
       "Statement" : {
