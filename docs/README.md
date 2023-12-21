@@ -14,7 +14,7 @@ repository.
 
 ```bash
 module "target" {
-  source = "../../"
+  source = "git@github.com:glg/terraform-aws-sam-lambda-essentials.git?ref=v1.0.0"
   providers = {
     aws.primary = aws.prototype_use1
   }
