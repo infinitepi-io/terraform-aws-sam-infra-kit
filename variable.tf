@@ -15,7 +15,7 @@ variable "github_monorepo" {
   type = string
   validation {
     condition     = can(regex("^glg\\/[^\\/]+$", var.github_monorepo))
-    error_message = "The ECR repository name should start with glg"
+    error_message = "Github mopno repository name should start with glg/"
   }
   description = "GitHub repository name"
 }
