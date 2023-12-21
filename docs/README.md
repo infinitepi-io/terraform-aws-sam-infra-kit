@@ -18,8 +18,8 @@ module "target" {
   providers = {
     aws.primary = aws.prototype_use1
   }
-  name            = "test-${local.id}"
-  github_monorepo = "glg/infrastructure-management-lambda"
+  name            = "${project_name}"
+  github_monorepo = "${mono_repo_name}"
   custom_policy = {
     # ${policy_name} = ${josn_policy}
     LambdaAdditionalPolicy = jsonencode({
