@@ -26,10 +26,11 @@ locals {
 module "target" {
   source = "../../"
   providers = {
-    aws.primary = aws.prototype_use1
+    aws.primary   = aws.prototype_use1,
+    aws.secondary = aws.experiments_use1,
   }
   name            = "test-${local.id}"
-  github_monorepo = "glg/infrastructure-management-lambda"
+  github_monorepo = "glg/infrastructure-support-lambdas"
   custom_policy = {
     LambdaAdditionalPolicy = jsonencode({
       "Version" : "2012-10-17",

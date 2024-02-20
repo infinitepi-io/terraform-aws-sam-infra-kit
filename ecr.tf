@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "this" {
-  provider             = aws.primary
+  provider             = aws.secondary
   name                 = "${var.github_monorepo}/${var.name}"
   image_tag_mutability = "MUTABLE"
   force_delete         = true
@@ -10,7 +10,7 @@ resource "aws_ecr_repository" "this" {
 }
 
 resource "aws_ecr_repository_policy" "this" {
-  provider   = aws.primary
+  provider   = aws.secondary
   repository = aws_ecr_repository.this.name
   policy = jsonencode({
     "Version" : "2008-10-17",
@@ -30,7 +30,7 @@ resource "aws_ecr_repository_policy" "this" {
         ],
         "Condition" : {
           "StringLike" : {
-            "aws:sourceArn" : "arn:${local.aws_primary.partition}:lambda:${local.aws_primary.region}:${local.aws_primary.account_id}:function:*"
+            "aws:sourceArn" : "arn:${local.aws_secondary.partition}:lambda:${local.aws_secondary.region}:${local.aws_secondary.account_id}:function:*"
           }
         }
       }

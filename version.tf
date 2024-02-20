@@ -6,6 +6,7 @@ terraform {
       version = ">= 5.0"
       configuration_aliases = [
         aws.primary,
+        aws.secondary
       ]
     }
   }
