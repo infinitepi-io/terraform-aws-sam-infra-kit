@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "this" {
-  provider             = aws.secondary
+  provider             = aws.ecr_repository
   name                 = "${var.github_monorepo}/${var.name}"
   image_tag_mutability = "MUTABLE"
   force_delete         = true
@@ -10,7 +10,7 @@ resource "aws_ecr_repository" "this" {
 }
 
 resource "aws_ecr_repository_policy" "this" {
-  provider   = aws.secondary
+  provider   = aws.ecr_repository
   repository = aws_ecr_repository.this.name
   policy = jsonencode({
     "Version" : "2008-10-17",
@@ -19,18 +19,22 @@ resource "aws_ecr_repository_policy" "this" {
         "Sid" : "LambdaECRImageRetrievalPolicy",
         "Effect" : "Allow",
         "Principal" : {
+          "AWS" : "arn:aws:iam::${local.aws_lambda_role.account_id}:root"
+        },
+        "Action" : "ecr:*"
+      },
+      {
+        "Sid" : "LambdaECRImageRetrievalPolicy",
+        "Effect" : "Allow",
+        "Principal" : {
           "Service" : "lambda.amazonaws.com"
         },
         "Action" : [
-          "ecr:BatchGetImage",
-          "ecr:DeleteRepositoryPolicy",
-          "ecr:GetDownloadUrlForLayer",
-          "ecr:GetRepositoryPolicy",
-          "ecr:SetRepositoryPolicy"
+          "ecr:*",
         ],
         "Condition" : {
           "StringLike" : {
-            "aws:sourceArn" : "arn:${local.aws_secondary.partition}:lambda:${local.aws_secondary.region}:${local.aws_secondary.account_id}:function:*"
+            "aws:sourceArn" : "arn:${local.aws_lambda_role.partition}:lambda:${local.aws_lambda_role.region}:${local.aws_lambda_role.account_id}:function:*"
           }
         }
       }

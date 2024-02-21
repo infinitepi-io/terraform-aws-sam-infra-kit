@@ -26,8 +26,8 @@ locals {
 module "target" {
   source = "../../"
   providers = {
-    aws.primary   = aws.prototype_use1,
-    aws.secondary = aws.experiments_use1,
+    aws.lambda_role    = aws.prototype_use1,
+    aws.ecr_repository = aws.experiments_use1,
   }
   name            = "test-${local.id}"
   github_monorepo = "glg/infrastructure-support-lambdas"

@@ -1,7 +1,3 @@
-output "aws" {
-  value = local.aws_primary
-}
-
 output "lambda_role" {
   value = {
     lambda_role_arn  = aws_iam_role.lambda.arn

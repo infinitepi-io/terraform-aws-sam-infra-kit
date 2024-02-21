@@ -2,7 +2,7 @@
 # Lambda Function Role and Policy
 ##############################################################################
 resource "aws_iam_role" "lambda" {
-  provider = aws.primary
+  provider = aws.lambda_role
   name     = "sam-lambda_${var.name}"
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
@@ -20,7 +20,7 @@ resource "aws_iam_role" "lambda" {
 }
 
 resource "aws_iam_role_policy" "lambda" {
-  provider = aws.primary
+  provider = aws.lambda_role
   for_each = var.custom_policy
   name     = each.key
   policy   = each.value
@@ -28,7 +28,7 @@ resource "aws_iam_role_policy" "lambda" {
 }
 
 resource "aws_iam_role_policy_attachment" "lambda" {
-  provider   = aws.primary
+  provider   = aws.lambda_role
   role       = aws_iam_role.lambda.name
-  policy_arn = "arn:${local.aws_primary.partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  policy_arn = "arn:${local.aws_lambda_role.partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
