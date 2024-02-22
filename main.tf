@@ -1,32 +1,32 @@
-data "aws_region" "primary" {
-  provider = aws.primary
+data "aws_region" "lambda_role" {
+  provider = aws.lambda_role
 }
-data "aws_caller_identity" "primary" {
-  provider = aws.primary
+data "aws_caller_identity" "lambda_role" {
+  provider = aws.lambda_role
 }
-data "aws_partition" "primary" {
-  provider = aws.primary
+data "aws_partition" "lambda_role" {
+  provider = aws.lambda_role
 }
-data "aws_region" "secondary" {
-  provider = aws.secondary
+data "aws_region" "ecr_repository" {
+  provider = aws.ecr_repository
 }
-data "aws_caller_identity" "secondary" {
-  provider = aws.secondary
+data "aws_caller_identity" "ecr_repository" {
+  provider = aws.ecr_repository
 }
-data "aws_partition" "secondary" {
-  provider = aws.secondary
+data "aws_partition" "ecr_repository" {
+  provider = aws.ecr_repository
 }
 locals {
-  aws_primary = {
-    region     = data.aws_region.primary.name
-    account_id = data.aws_caller_identity.primary.account_id
-    dns_suffix = data.aws_partition.primary.dns_suffix
-    partition  = data.aws_partition.primary.partition
+  aws_lambda_role = {
+    region     = data.aws_region.lambda_role.name
+    account_id = data.aws_caller_identity.lambda_role.account_id
+    dns_suffix = data.aws_partition.lambda_role.dns_suffix
+    partition  = data.aws_partition.lambda_role.partition
   }
-  aws_secondary = {
-    region     = data.aws_region.secondary.name
-    account_id = data.aws_caller_identity.secondary.account_id
-    dns_suffix = data.aws_partition.secondary.dns_suffix
-    partition  = data.aws_partition.secondary.partition
+  aws_ecr_repository = {
+    region     = data.aws_region.ecr_repository.name
+    account_id = data.aws_caller_identity.ecr_repository.account_id
+    dns_suffix = data.aws_partition.ecr_repository.dns_suffix
+    partition  = data.aws_partition.ecr_repository.partition
   }
 }
