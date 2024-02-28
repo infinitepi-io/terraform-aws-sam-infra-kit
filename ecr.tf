@@ -19,9 +19,14 @@ resource "aws_ecr_repository_policy" "this" {
         "Sid" : "LambdaECRImageRetrievalPolicy",
         "Effect" : "Allow",
         "Principal" : {
-          "AWS" : "arn:aws:iam::${local.aws_lambda_role.account_id}:root"
+          "AWS" : "*"
         },
-        "Action" : "ecr:*"
+        "Action" : "ecr:*",
+        "Condition" : {
+          "StringEquals" : {
+            "aws:PrincipalOrgID" : "o-ifre3ueanm"
+          }
+        }
       },
       {
         "Sid" : "LambdaECRImageRetrievalPolicy",
@@ -30,11 +35,15 @@ resource "aws_ecr_repository_policy" "this" {
           "Service" : "lambda.amazonaws.com"
         },
         "Action" : [
-          "ecr:*",
+          "ecr:BatchGetImage",
+          "ecr:DeleteRepositoryPolicy",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:GetRepositoryPolicy",
+          "ecr:SetRepositoryPolicy"
         ],
         "Condition" : {
           "StringLike" : {
-            "aws:sourceArn" : "arn:${local.aws_lambda_role.partition}:lambda:${local.aws_lambda_role.region}:${local.aws_lambda_role.account_id}:function:*"
+            "aws:SourceArn" : "arn:*:lambda:*:*:function:${var.name}"
           }
         }
       }
