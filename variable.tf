@@ -25,3 +25,13 @@ variable "custom_policy" {
   default     = {}
   description = "Additional policy required to for the lambda function."
 }
+variable "account_ids" {
+  type = list(string)
+  default = [
+    "988857891049"
+  ]
+}
+variable "ecr_creation" {
+  type    = bool
+  default = true
+}

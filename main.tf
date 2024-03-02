@@ -29,4 +29,8 @@ locals {
     dns_suffix = data.aws_partition.ecr_repository.dns_suffix
     partition  = data.aws_partition.ecr_repository.partition
   }
+  allowed_function_arns = [
+    for account_id in var.account_ids : "arn:*:lambda:*:${account_id}:function:${var.name}"
+  ]
+  denied_function_arns = contains(var.account_ids, "988857891049") ? "arn:*:lambda:*:*:function:${var.name}" : "arn:*:lambda:*:988857891049:function:${var.name}"
 }

@@ -1,5 +1,6 @@
 resource "aws_ecr_repository" "this" {
   provider             = aws.ecr_repository
+  count                = var.ecr_creation ? 1 : 0
   name                 = "${var.github_monorepo}/${var.name}"
   image_tag_mutability = "MUTABLE"
   force_delete         = true
@@ -11,7 +12,8 @@ resource "aws_ecr_repository" "this" {
 
 resource "aws_ecr_repository_policy" "this" {
   provider   = aws.ecr_repository
-  repository = aws_ecr_repository.this.name
+  count      = var.ecr_creation ? 1 : 0
+  repository = aws_ecr_repository.this[0].name
   policy = jsonencode({
     "Version" : "2008-10-17",
     "Statement" : [
@@ -21,7 +23,17 @@ resource "aws_ecr_repository_policy" "this" {
         "Principal" : {
           "AWS" : "*"
         },
-        "Action" : "ecr:*",
+        "Action" : [
+          "ecr:BatchGetImage",
+          "ecr:DeleteRepositoryPolicy",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:GetRepositoryPolicy",
+          "ecr:InitiateLayerUpload",
+          "ecr:UploadLayerPart",
+          "ecr:CompleteLayerUpload",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:PutImage",
+        ],
         "Condition" : {
           "StringEquals" : {
             "aws:PrincipalOrgID" : "o-ifre3ueanm"
@@ -39,11 +51,23 @@ resource "aws_ecr_repository_policy" "this" {
           "ecr:DeleteRepositoryPolicy",
           "ecr:GetDownloadUrlForLayer",
           "ecr:GetRepositoryPolicy",
-          "ecr:SetRepositoryPolicy"
         ],
         "Condition" : {
           "StringLike" : {
-            "aws:SourceArn" : "arn:*:lambda:*:*:function:${var.name}"
+            "aws:SourceArn" : local.allowed_function_arns
+          }
+        }
+      },
+      {
+        "Sid" : "DenyAccessToEcrRepository",
+        "Effect" : "Allow",
+        "Principal" : {
+          "Service" : "lambda.amazonaws.com"
+        },
+        "Action" : "ecr:*"
+        "Condition" : {
+          "StringNotLike" : {
+            "aws:SourceArn" : local.denied_function_arns
           }
         }
       }

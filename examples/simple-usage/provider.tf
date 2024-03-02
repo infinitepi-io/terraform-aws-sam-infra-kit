@@ -57,3 +57,15 @@ provider "aws" {
   }
 }
 
+provider "aws" {
+  alias               = "infra_mgnt_use1"
+  region              = "us-east-1"
+  allowed_account_ids = ["196017527820"]
+
+  default_tags { tags = local.default_tags }
+
+  assume_role {
+    role_arn = "arn:aws:iam::196017527820:role/infrastructure-as-code-write"
+  }
+}
+
