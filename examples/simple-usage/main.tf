@@ -31,6 +31,7 @@ module "target" {
   }
   name            = "test-access"
   github_monorepo = "glg/infrastructure-support-lambdas"
+  ecr_creation    = true
   custom_policy = {
     LambdaAdditionalPolicy = jsonencode({
       "Version" : "2012-10-17",
@@ -59,8 +60,9 @@ module "target2" {
   account_ids = [
     "474668255207",
     #Add the below account to allow access to ECR if the same image is used for other account. like in target3
-    "196017527820"
+    # "196017527820"
   ]
+  ecr_creation = true
   custom_policy = {
     LambdaAdditionalPolicy = jsonencode({
       "Version" : "2012-10-17",
@@ -85,7 +87,6 @@ module "target3" {
   }
   name            = "test-access"
   github_monorepo = "glg/infrastructure-support-lambdas"
-  ecr_creation    = false
   custom_policy = {
     LambdaAdditionalPolicy = jsonencode({
       "Version" : "2012-10-17",

@@ -18,7 +18,7 @@ resource "aws_ecr_repository_policy" "this" {
     "Version" : "2008-10-17",
     "Statement" : [
       {
-        "Sid" : "LambdaECRImageRetrievalPolicy",
+        "Sid" : "ECRImageRetrievalPolicy",
         "Effect" : "Allow",
         "Principal" : {
           "AWS" : "*"
@@ -55,19 +55,6 @@ resource "aws_ecr_repository_policy" "this" {
         "Condition" : {
           "StringLike" : {
             "aws:SourceArn" : local.allowed_function_arns
-          }
-        }
-      },
-      {
-        "Sid" : "DenyAccessToEcrRepository",
-        "Effect" : "Allow",
-        "Principal" : {
-          "Service" : "lambda.amazonaws.com"
-        },
-        "Action" : "ecr:*"
-        "Condition" : {
-          "StringNotLike" : {
-            "aws:SourceArn" : local.denied_function_arns
           }
         }
       }
