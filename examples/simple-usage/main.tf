@@ -47,7 +47,7 @@ module "target" {
     })
   }
 }
-## Deploying the cross account lambda. lambda in infra-mgnt and ECR repo in experiments_use1.
+## Deploying the cross account lambda. lambda in prototypet and ECR repo in experiments_use1.
 module "target2" {
   source = "../../"
   providers = {
