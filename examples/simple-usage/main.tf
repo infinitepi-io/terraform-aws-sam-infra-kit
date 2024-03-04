@@ -29,7 +29,7 @@ module "target" {
     aws.lambda_role    = aws.prototype_use1,
     aws.ecr_repository = aws.prototype_use1,
   }
-  name            = "test-access"
+  name            = "test-${local.id}"
   github_monorepo = "glg/infrastructure-support-lambdas"
   ecr_creation    = true
   custom_policy = {
@@ -54,13 +54,13 @@ module "target2" {
     aws.lambda_role    = aws.prototype_use1,
     aws.ecr_repository = aws.experiments_use1,
   }
-  name            = "test-access"
+  name            = "test-${local.id}"
   github_monorepo = "glg/infrastructure-support-lambdas"
   # All the cross account access will be controlled from here. This shows how many account lambda is currently deployed.
   account_ids = [
-    "474668255207",
+    "988857891049",
     #Add other accounts to allow lambda in other account to pull image.
-    # "196017527820"
+    # "474668255207"
   ]
   ecr_creation = true
   custom_policy = {
@@ -82,7 +82,6 @@ module "target2" {
 output "all" {
   value = {
     target  = module.target,
-    target2 = module.target2
-    target3 = module.target3
+    target2 = module.target2,
   }
 }
