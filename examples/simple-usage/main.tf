@@ -51,42 +51,18 @@ module "target" {
 module "target2" {
   source = "../../"
   providers = {
-    aws.lambda_role    = aws.experiments_use1,
-    aws.ecr_repository = aws.infra_mgnt_use1,
+    aws.lambda_role    = aws.prototype_use1,
+    aws.ecr_repository = aws.experiments_use1,
   }
   name            = "test-access"
   github_monorepo = "glg/infrastructure-support-lambdas"
   # All the cross account access will be controlled from here. This shows how many account lambda is currently deployed.
   account_ids = [
     "474668255207",
-    #Add the below account to allow access to ECR if the same image is used for other account. like in target3
+    #Add other accounts to allow lambda in other account to pull image.
     # "196017527820"
   ]
   ecr_creation = true
-  custom_policy = {
-    LambdaAdditionalPolicy = jsonencode({
-      "Version" : "2012-10-17",
-      "Statement" : {
-        "Effect" : "Allow",
-        "Action" : [
-          "secretsmanager:GetSecretValue"
-        ]
-        "Resource" : [
-          "arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:${local.secret_name}-??????"
-        ]
-      }
-    })
-  }
-}
-# The same lambda is deployed in the same account as ECR repository. 
-module "target3" {
-  source = "../../"
-  providers = {
-    aws.lambda_role    = aws.infra_mgnt_use1,
-    aws.ecr_repository = aws.infra_mgnt_use1,
-  }
-  name            = "test-access"
-  github_monorepo = "glg/infrastructure-support-lambdas"
   custom_policy = {
     LambdaAdditionalPolicy = jsonencode({
       "Version" : "2012-10-17",
