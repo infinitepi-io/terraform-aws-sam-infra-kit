@@ -25,3 +25,15 @@ variable "custom_policy" {
   default     = {}
   description = "Additional policy required to for the lambda function."
 }
+variable "account_ids" {
+  type = list(string)
+  default = [
+    "988857891049"
+  ]
+  description = "A list of accounts to give access to multiple account lambda deployment using the same ecr image."
+}
+variable "ecr_creation" {
+  type        = bool
+  default     = false
+  description = "Use this flag to create ecr repository and policy."
+}

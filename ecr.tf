@@ -1,5 +1,6 @@
 resource "aws_ecr_repository" "this" {
   provider             = aws.ecr_repository
+  count                = var.ecr_creation ? 1 : 0
   name                 = "${var.github_monorepo}/${var.name}"
   image_tag_mutability = "MUTABLE"
   force_delete         = true
@@ -11,17 +12,33 @@ resource "aws_ecr_repository" "this" {
 
 resource "aws_ecr_repository_policy" "this" {
   provider   = aws.ecr_repository
-  repository = aws_ecr_repository.this.name
+  count      = var.ecr_creation ? 1 : 0
+  repository = aws_ecr_repository.this[0].name
   policy = jsonencode({
     "Version" : "2008-10-17",
     "Statement" : [
       {
-        "Sid" : "LambdaECRImageRetrievalPolicy",
+        "Sid" : "ECRImageRetrievalPolicy",
         "Effect" : "Allow",
         "Principal" : {
-          "AWS" : "arn:aws:iam::${local.aws_lambda_role.account_id}:root"
+          "AWS" : "*"
         },
-        "Action" : "ecr:*"
+        "Action" : [
+          "ecr:BatchGetImage",
+          "ecr:DeleteRepositoryPolicy",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:GetRepositoryPolicy",
+          "ecr:InitiateLayerUpload",
+          "ecr:UploadLayerPart",
+          "ecr:CompleteLayerUpload",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:PutImage",
+        ],
+        "Condition" : {
+          "StringEquals" : {
+            "aws:PrincipalOrgID" : "o-ifre3ueanm"
+          }
+        }
       },
       {
         "Sid" : "LambdaECRImageRetrievalPolicy",
@@ -30,11 +47,14 @@ resource "aws_ecr_repository_policy" "this" {
           "Service" : "lambda.amazonaws.com"
         },
         "Action" : [
-          "ecr:*",
+          "ecr:BatchGetImage",
+          "ecr:DeleteRepositoryPolicy",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:GetRepositoryPolicy",
         ],
         "Condition" : {
           "StringLike" : {
-            "aws:sourceArn" : "arn:${local.aws_lambda_role.partition}:lambda:${local.aws_lambda_role.region}:${local.aws_lambda_role.account_id}:function:*"
+            "aws:SourceArn" : local.allowed_function_arns
           }
         }
       }

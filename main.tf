@@ -29,4 +29,7 @@ locals {
     dns_suffix = data.aws_partition.ecr_repository.dns_suffix
     partition  = data.aws_partition.ecr_repository.partition
   }
+  allowed_function_arns = [
+    for account_id in var.account_ids : "arn:*:lambda:*:${account_id}:function:${var.name}"
+  ]
 }

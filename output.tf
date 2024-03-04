@@ -7,7 +7,7 @@ output "lambda_role" {
 
 output "ecr_repository" {
   value = {
-    ecr_repository_arn  = aws_ecr_repository.this.arn
-    ecr_repository_name = aws_ecr_repository.this.name
+    ecr_repository_arn  = var.ecr_creation == true ? aws_ecr_repository.this[0].arn : "skipped_ecr_creation"
+    ecr_repository_name = var.ecr_creation == true ? aws_ecr_repository.this[0].name : "skipped_ecr_creation"
   }
 }
