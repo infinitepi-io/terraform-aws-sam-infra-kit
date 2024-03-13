@@ -10,7 +10,7 @@ Name of the roles and repository will be given by the script while onboarding th
 repository.
 **Example:**
 
-![image](https://github.com/glg/terraform-aws-sam-lambda-essentials/assets/111346255/cd4c203e-39d8-4e11-ab9e-f6474bb56228)
+![image](./image/README/new-project.png)
 
 ```bash
 # Create the repository only in one account.
@@ -72,8 +72,10 @@ output "all" {
     target  = module.target,
     target2 = module.target2,
   }
-}
+
 ```
+
+
 
 ## Testing Overview
 
