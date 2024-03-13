@@ -50,7 +50,6 @@ module "target2" {
   account_ids = [
     "474668255207",
   ]
-  ecr_creation = true
   custom_policy = {
     LambdaAdditionalPolicy = jsonencode({
       "Version" : "2012-10-17",
@@ -74,8 +73,6 @@ output "all" {
   }
 
 ```
-
-
 
 ## Testing Overview
 
