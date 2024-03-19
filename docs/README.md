@@ -13,15 +13,16 @@ repository.
 ![image](./image/README/new-project.png)
 
 ```bash
-# Create the repository only in one account.
+# Prototype deployment: lambda role and ECR repository will be created in prototype account. 
 module "target1" {
-  source = "git@github.com:glg/terraform-aws-sam-lambda-essentials.git?ref=main"
+  source = "git@github.com:glg/terraform-aws-sam-lambda-essentials.git?ref=v1.3.1"
   providers = {
     aws.lambda_role    = aws.prototype_use1,
-    aws.ecr_repository = aws.infrastructure-management_use1
+    aws.ecr_repository = aws.prototype_use1
   }
   name            = "${project_name}"
   github_monorepo = "${mono_repo_name}"
+  ecr_creation = true
   custom_policy = {
     # ${policy_name} = ${josn_policy}
     LambdaAdditionalPolicy = jsonencode({
@@ -38,28 +39,31 @@ module "target1" {
     })
   }
 }
-# Same lambda in experiments account.
+# Lambda function is deployed in glgapp and search account.ECR repository will be in infrastructure-management account for all the production deployment. Following the idea of having a single production image.
 module "target2" {
-  source = "git@github.com:glg/terraform-aws-sam-lambda-essentials.git?ref=main"
+  source = "git@github.com:glg/terraform-aws-sam-lambda-essentials.git?ref=v1.3.1"
   providers = {
-    aws.lambda_role    = aws.experiments_use1,
+    aws.lambda_role    = aws.glgapp_use1,
     aws.ecr_repository = aws.infrastructure-management_use1,
   }
-  name            = "test-${local.id}"
+  name            = "${project_name}"
   github_monorepo = "glg/infrastructure-support-lambdas"
+  ecr_creation = true
   account_ids = [
-    "474668255207",
+    "868468680417",
+    "160069906927",
   ]
-  custom_policy = {
+   custom_policy = {
+    # ${policy_name} = ${josn_policy}
     LambdaAdditionalPolicy = jsonencode({
       "Version" : "2012-10-17",
       "Statement" : {
-        "Effect" : "Allow",
+        "Effect" : "...",
         "Action" : [
-          "secretsmanager:GetSecretValue"
+          "..."
         ]
         "Resource" : [
-          "arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:${local.secret_name}-??????"
+          "..."
         ]
       }
     })
@@ -71,7 +75,6 @@ output "all" {
     target  = module.target,
     target2 = module.target2,
   }
-
 ```
 
 ## Testing Overview
