@@ -39,20 +39,45 @@ module "target1" {
     })
   }
 }
-# Lambda function is deployed in glgapp and search account.ECR repository will be in infrastructure-management account for all the production deployment. Following the idea of having a single production image.
+# For all the lambdas deployed outside the prototype account or for production deployments, we will create a repository in the infrastructure-management account and roles in the respective accounts. In the below example lambda is deployed in account-1 and account-1.
 module "target2" {
   source = "git@github.com:glg/terraform-aws-sam-lambda-essentials.git?ref=v1.3.1"
   providers = {
-    aws.lambda_role    = aws.glgapp_use1,
+    aws.lambda_role    = aws.${account-1},
     aws.ecr_repository = aws.infrastructure-management_use1,
   }
   name            = "${project_name}"
   github_monorepo = "glg/infrastructure-support-lambdas"
   ecr_creation = true
   account_ids = [
-    "868468680417",
-    "160069906927",
+    "${account-1_id}",
+    "${account-2_id}",
   ]
+   custom_policy = {
+    # ${policy_name} = ${josn_policy}
+    LambdaAdditionalPolicy = jsonencode({
+      "Version" : "2012-10-17",
+      "Statement" : {
+        "Effect" : "...",
+        "Action" : [
+          "..."
+        ]
+        "Resource" : [
+          "..."
+        ]
+      }
+    })
+  }
+}
+# Creating lambda role in account-2.
+module "target3" {
+  source = "git@github.com:glg/terraform-aws-sam-lambda-essentials.git?ref=v1.3.1"
+  providers = {
+    aws.lambda_role    = aws.${account-2},
+    aws.ecr_repository = aws.infrastructure-management_use1,
+  }
+  name            = "${project_name}"
+  github_monorepo = "glg/infrastructure-support-lambdas"
    custom_policy = {
     # ${policy_name} = ${josn_policy}
     LambdaAdditionalPolicy = jsonencode({
@@ -72,8 +97,9 @@ module "target2" {
 
 output "all" {
   value = {
-    target  = module.target,
+    target1  = module.target1,
     target2 = module.target2,
+    target3 = module.target3
   }
 ```
 
