@@ -13,15 +13,16 @@ repository.
 ![image](./image/README/new-project.png)
 
 ```bash
-# Create the repository only in one account.
+# Prototype deployment: lambda role and ECR repository will be created in prototype account. 
 module "target1" {
-  source = "git@github.com:glg/terraform-aws-sam-lambda-essentials.git?ref=main"
+  source = "git@github.com:glg/terraform-aws-sam-lambda-essentials.git?ref=v1.3.1"
   providers = {
     aws.lambda_role    = aws.prototype_use1,
-    aws.ecr_repository = aws.infrastructure-management_use1
+    aws.ecr_repository = aws.prototype_use1
   }
   name            = "${project_name}"
   github_monorepo = "${mono_repo_name}"
+  ecr_creation = true
   custom_policy = {
     # ${policy_name} = ${josn_policy}
     LambdaAdditionalPolicy = jsonencode({
@@ -38,28 +39,56 @@ module "target1" {
     })
   }
 }
-# Same lambda in experiments account.
+# For all the lambdas deployed outside the prototype account or for production deployments, we will create a repository in the infrastructure-management account and roles in the respective accounts. In the below example lambda is deployed in account-1 and account-1.
 module "target2" {
-  source = "git@github.com:glg/terraform-aws-sam-lambda-essentials.git?ref=main"
+  source = "git@github.com:glg/terraform-aws-sam-lambda-essentials.git?ref=v1.3.1"
   providers = {
-    aws.lambda_role    = aws.experiments_use1,
+    aws.lambda_role    = aws.${account-1},
     aws.ecr_repository = aws.infrastructure-management_use1,
   }
-  name            = "test-${local.id}"
+  name            = "${project_name}"
   github_monorepo = "glg/infrastructure-support-lambdas"
+  ecr_creation = true
   account_ids = [
-    "474668255207",
+    "${account-1_id}",
+    "${account-2_id}",
   ]
-  custom_policy = {
+   custom_policy = {
+    # ${policy_name} = ${josn_policy}
     LambdaAdditionalPolicy = jsonencode({
       "Version" : "2012-10-17",
       "Statement" : {
-        "Effect" : "Allow",
+        "Effect" : "...",
         "Action" : [
-          "secretsmanager:GetSecretValue"
+          "..."
         ]
         "Resource" : [
-          "arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:${local.secret_name}-??????"
+          "..."
+        ]
+      }
+    })
+  }
+}
+# Creating lambda role in account-2.
+module "target3" {
+  source = "git@github.com:glg/terraform-aws-sam-lambda-essentials.git?ref=v1.3.1"
+  providers = {
+    aws.lambda_role    = aws.${account-2},
+    aws.ecr_repository = aws.infrastructure-management_use1,
+  }
+  name            = "${project_name}"
+  github_monorepo = "glg/infrastructure-support-lambdas"
+   custom_policy = {
+    # ${policy_name} = ${josn_policy}
+    LambdaAdditionalPolicy = jsonencode({
+      "Version" : "2012-10-17",
+      "Statement" : {
+        "Effect" : "...",
+        "Action" : [
+          "..."
+        ]
+        "Resource" : [
+          "..."
         ]
       }
     })
@@ -68,10 +97,10 @@ module "target2" {
 
 output "all" {
   value = {
-    target  = module.target,
+    target1  = module.target1,
     target2 = module.target2,
+    target3 = module.target3
   }
-
 ```
 
 ## Testing Overview
