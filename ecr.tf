@@ -36,7 +36,7 @@ resource "aws_ecr_repository_policy" "this" {
         ],
         "Condition" : {
           "StringEquals" : {
-            "aws:PrincipalOrgID" : "o-ifre3ueanm"
+            "aws:PrincipalOrgID" : local.org_id
           }
         }
       },
