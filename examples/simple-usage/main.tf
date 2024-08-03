@@ -30,7 +30,7 @@ module "target" {
     aws.ecr_repository = aws.prototype_use1,
   }
   name            = "test-${local.id}"
-  github_monorepo = "glg/infrastructure-support-lambdas"
+  github_monorepo = "infinitepi-io/infrastructure-support-lambdas"
   ecr_creation    = true
   custom_policy = {
     LambdaAdditionalPolicy = jsonencode({
