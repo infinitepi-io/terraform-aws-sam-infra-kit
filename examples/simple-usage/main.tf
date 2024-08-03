@@ -55,7 +55,7 @@ module "target2" {
     aws.ecr_repository = aws.experiments_use1,
   }
   name            = "test-${local.id}"
-  github_monorepo = "glg/infrastructure-support-lambdas"
+  github_monorepo = "infinitepi-io/infrastructure-support-lambdas"
   # All the cross account access will be controlled from here. This shows how many account lambda is currently deployed.
   account_ids = [
     "988857891049",
