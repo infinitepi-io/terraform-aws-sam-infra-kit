@@ -2,7 +2,7 @@
 
 # `terraform-aws-sam-lambda-essentials`
 
-This module creates lambda function role and ECR repository for SAM lambda deployed using **[infrastructure-management-lambda](https://github.com/glg/infrastructure-management-lambda)** .
+This module creates lambda function role and ECR repository for SAM lambda deployed using **[infrastructure-management-lambda]([https://github.com/glg/infrastructure-management-lambda](https://github.com/infinitepi-io/infrastructure-support-lambdas))** .
 
 ## Usage
 
