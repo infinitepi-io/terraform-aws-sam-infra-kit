@@ -14,7 +14,7 @@ variable "name" {
 variable "github_monorepo" {
   type = string
   validation {
-    condition     = can(regex("^glg\\/[^\\/]+$", var.github_monorepo))
+    condition     = can(regex("^infinitepi-io\\/[^\\/]+$", var.github_monorepo))
     error_message = "Github mopno repository name should start with glg/"
   }
   description = "GitHub repository name"
