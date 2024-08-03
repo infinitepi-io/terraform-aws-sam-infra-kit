@@ -1,4 +1,4 @@
-
+[![unit-test](../../../actions/workflows/unit-test.yml/badge.svg)](../../../actions/workflows/unit-test.yml)
 
 # `terraform-aws-sam-lambda-essentials`
 
