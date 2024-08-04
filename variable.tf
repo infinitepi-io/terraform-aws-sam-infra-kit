@@ -28,7 +28,7 @@ variable "custom_policy" {
 variable "account_ids" {
   type = list(string)
   default = [
-    "988857891049"
+    "158710814571"
   ]
   description = "A list of accounts to give access to multiple account lambda deployment using the same ecr image."
 }
