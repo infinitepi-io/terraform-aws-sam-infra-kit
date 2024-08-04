@@ -10,8 +10,6 @@ Name of the roles and repository will be given by the script while onboarding th
 repository.
 **Example:**
 
-![image](./image/README/new-project.png)
-
 ```bash
 # Prototype deployment: lambda role and ECR repository will be created in prototype account. 
 module "target1" {
