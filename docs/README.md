@@ -1,6 +1,6 @@
 [![unit-test](../../../actions/workflows/unit-test.yml/badge.svg)](../../../actions/workflows/unit-test.yml)
 
-# `terraform-aws-sam-lambda-essentials`
+# `terraform-aws-sam-infra-kit`
 
 This module creates lambda function role and ECR repository for SAM lambda deployed using **[infrastructure-management-lambda]([https://github.com/glg/infrastructure-management-lambda](https://github.com/infinitepi-io/infrastructure-support-lambdas))** .
 
@@ -15,7 +15,7 @@ repository.
 ```bash
 # Prototype deployment: lambda role and ECR repository will be created in prototype account. 
 module "target1" {
-  source = "git@github.com:glg/terraform-aws-sam-lambda-essentials.git?ref=v1.3.1"
+  source = "git@github.com:infinitepi-io/terraform-aws-sam-infra-kit.git?ref=v1.0.0"
   providers = {
     aws.lambda_role    = aws.prototype_use1,
     aws.ecr_repository = aws.prototype_use1
@@ -41,7 +41,7 @@ module "target1" {
 }
 # For all the lambdas deployed outside the prototype account or for production deployments, we will create a repository in the infrastructure-management account and roles in the respective accounts. In the below example lambda is deployed in account-1 and account-1.
 module "target2" {
-  source = "git@github.com:glg/terraform-aws-sam-lambda-essentials.git?ref=v1.3.1"
+  source = "git@github.com:infinitepi-io/terraform-aws-sam-infra-kit.git?ref=v1.0.0"
   providers = {
     aws.lambda_role    = aws.${account-1},
     aws.ecr_repository = aws.infrastructure-management_use1,
@@ -71,7 +71,7 @@ module "target2" {
 }
 # Creating lambda role in account-2.
 module "target3" {
-  source = "git@github.com:glg/terraform-aws-sam-lambda-essentials.git?ref=v1.3.1"
+  source = "git@github.com:infinitepi-io/terraform-aws-sam-infra-kit.git?ref=v1.0.0"
   providers = {
     aws.lambda_role    = aws.${account-2},
     aws.ecr_repository = aws.infrastructure-management_use1,
